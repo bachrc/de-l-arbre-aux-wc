@@ -1,21 +1,30 @@
-import type { AuthModel } from 'pocketbase';
+import type { AuthModel, RecordModel } from 'pocketbase';
 import { pb } from './database';
 
+export type User = {
+  username: string;
+  email: string;
+  name: string;
+};
+
 function userStore() {
-  let currentUser = $state(pb.authStore.model);
+  let currentUser = $state(pb.authStore.model as User);
 
   return {
-    get value() {
+    get value(): User {
       return currentUser;
     },
-    updateUser: (user: AuthModel) => {
+    updateUser: (user: User) => {
       currentUser = user;
     },
     get mail() {
-      return currentUser?.email;
+      return currentUser.email;
     },
     get username() {
-      return currentUser?.username;
+      return currentUser.username;
+    },
+    get name() {
+      return currentUser.name;
     }
   };
 }
@@ -23,7 +32,7 @@ function userStore() {
 export let currentUser = userStore();
 
 pb.authStore.onChange((_, model) => {
-  currentUser.updateUser(model);
+  currentUser.updateUser(model as User);
 });
 
 export async function login(mail: string, pass: string) {
