@@ -1,0 +1,28 @@
+{
+	"name": "De L'Arbre aux WC",
+	"build": {
+		"dockerfile": "../Dockerfile",
+		"context": "..",
+		"target": "dev"
+	},
+	"remoteUser": "deno",
+	"mounts": [
+		"source=${localWorkspaceFolderBasename}-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume"
+	],
+	"postCreateCommand": "sudo chown deno:deno node_modules && deno install --allow-scripts=npm:@sveltejs/kit",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"svelte.svelte-vscode",
+				"ms-vscode-remote.remote-containers",
+				"esbenp.prettier-vscode",
+				"EditorConfig.EditorConfig",
+				"denoland.vscode-deno"
+			],
+			"settings": {
+				"terminal.integrated.defaultProfile.linux": "bash",
+				"terminal.integrated.profiles.linux": { "bash": { "path": "/bin/bash" } }
+			}
+		}
+	}
+}
