@@ -1,1 +1,1 @@
-<h1>On fait du café</h1>
+<h1 class="text-lg">On fait du café</h1>
