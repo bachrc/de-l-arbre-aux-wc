@@ -10,7 +10,7 @@
     <a href="/"><span>☕️</span></a>
     <div class=" grow"></div>
     {#if currentUser.value != null}
-      <a href="/profil"><span> Bonjour {currentUser.name} !</span></a>
+      <a href="/profil"><span>Bonjour {currentUser.name} !</span></a>
     {:else}
       <a href="/login">
         <span>Se connecter</span>
