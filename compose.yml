@@ -1,0 +1,16 @@
+services:
+  web:
+    image: ghcr.io/bachrc/de-l-arbre-aux-wc-app:latest
+    container_name: arbre-wc-web
+    ports:
+      - 80:80
+    environment:
+      PUBLIC_POCKETBASE_URL: db:8080
+
+  db:
+    image: ghcr.io/bachrc/de-l-arbre-aux-wc-database:latest
+    container_name: arbre-wc-database
+    ports:
+      - 8080:8080
+    volumes:
+      - ./pb_data:/home/deno/.local/pb/pb_data
