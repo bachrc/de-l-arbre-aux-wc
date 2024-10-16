@@ -19,7 +19,9 @@
         "EditorConfig.EditorConfig",
         "denoland.vscode-deno",
         "bradlc.vscode-tailwindcss",
-        "austenc.tailwind-docs"
+        "austenc.tailwind-docs",
+        "github.vscode-github-actions",
+        "GitHub.vscode-pull-request-github"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "bash",
