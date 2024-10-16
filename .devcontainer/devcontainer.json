@@ -3,7 +3,7 @@
   "build": {
     "dockerfile": "../Dockerfile",
     "context": "..",
-    "target": "dev"
+    "target": "base"
   },
   "remoteUser": "deno",
   "mounts": [
