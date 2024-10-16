@@ -9,7 +9,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: 'bachrc/de-l-abre-aux-wc-database'
+  IMAGE_NAME: 'bachrc/de-l-arbre-aux-wc-database'
 
 permissions:
   contents: read
