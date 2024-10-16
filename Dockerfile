@@ -26,7 +26,7 @@ RUN deno task build
 FROM base AS database
 WORKDIR /app
 COPY ./pb_migrations /app/pb_migrations
-CMD "pocketbase serve"
+CMD "/home/deno/.local/pb/pocketbase serve"
 
 FROM nginx:1-alpine AS app
 COPY --from=build /app/build /usr/share/nginx/html
