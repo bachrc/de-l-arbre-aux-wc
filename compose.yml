@@ -5,7 +5,7 @@ services:
     ports:
       - 80:80
     environment:
-      PUBLIC_POCKETBASE_URL: db:8080
+      PUBLIC_POCKETBASE_URL: 127.0.0.1:8080
 
   db:
     image: ghcr.io/bachrc/de-l-arbre-aux-wc-database:latest

@@ -1,15 +1,13 @@
-name: Déploiement de la base de données
+name: Déploiement de l'application
 
 on:
   push:
     branches:
       - main
-    paths:
-      - pb_migrations/**
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: 'bachrc/de-l-arbre-aux-wc-database'
+  IMAGE_NAME: 'bachrc/de-l-arbre-aux-wc'
 
 permissions:
   contents: read
@@ -53,7 +51,7 @@ jobs:
         with:
           context: .
           push: true
-          target: database
+          target: app
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64,linux/arm64/v8
