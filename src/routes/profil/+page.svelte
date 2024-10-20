@@ -17,5 +17,9 @@
       <span class="text-xs font-bold">Adresse mail</span>
       <span>{currentUser.value?.email}</span>
     </div>
+    <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-300" />
+    <a href="/logout">
+      <span class="text-red-700 font-semibold">Se déconnecter</span>
+    </a>
   </div>
 </div>
