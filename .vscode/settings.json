@@ -3,6 +3,5 @@
   "editor.formatOnSave": true,
   "deno.enable": true,
   "svelte.plugin.svelte.defaultScriptLanguage": "ts",
-  "dev.containers.experimentalLockfile": true,
   "tailwindDocs.useSimpleBrowser": false
 }

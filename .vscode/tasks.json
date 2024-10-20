@@ -1,0 +1,51 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Bash",
+      "type": "process",
+      "command": "/bin/bash",
+      "isBackground": true, // removes the infinite spinner
+      "problemMatcher": [],
+      "presentation": {
+        "group": "main_tasks",
+        "reveal": "always",
+        "panel": "new",
+        "echo": false // silence "Executing task ..."
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
+      "label": "Deno watch",
+      "type": "shell",
+      "command": "deno task dev",
+      "isBackground": true,
+      "presentation": {
+        "group": "main_tasks",
+        "reveal": "always",
+        "panel": "new",
+        "echo": false // silence "Executing task ..."
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
+      "label": "Pocketbase",
+      "type": "shell",
+      "command": "pocketbase serve",
+      "isBackground": true,
+      "presentation": {
+        "reveal": "never",
+        "panel": "new",
+        "showReuseMessage": false,
+        "echo": false // silence "Executing task ..."
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    }
+  ]
+}
