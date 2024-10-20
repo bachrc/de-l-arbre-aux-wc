@@ -52,6 +52,8 @@ jobs:
           context: .
           push: true
           target: app
+          build-args: |
+            PUBLIC_POCKETBASE_URL=/
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64,linux/arm64/v8

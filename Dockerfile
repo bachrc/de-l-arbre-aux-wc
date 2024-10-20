@@ -2,6 +2,7 @@ FROM denoland/deno:2.0.0 AS base
 
 ARG PB_VERSION=0.22.21
 ARG ARCH=arm64
+ARG 
 
 USER root
 RUN mkdir -p /home/deno && chown -R deno:deno /home/deno
@@ -16,6 +17,7 @@ ADD --chown=deno:deno https://github.com/pocketbase/pocketbase/releases/download
 RUN unzip /tmp/pb.zip -d /home/deno/.local/pb/
 
 FROM base AS build
+ARG PUBLIC_POCKETBASE_URL
 WORKDIR /app
 USER deno
 COPY --chown=deno:deno package.json deno.lock .
