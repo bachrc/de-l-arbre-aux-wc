@@ -31,7 +31,7 @@ ENTRYPOINT ["/home/deno/.local/pb/pocketbase", "serve"]
 CMD ["--http=0.0.0.0:8080"]
 
 FROM database AS app
-RUN mkdir -p /home/deno/.local/pb/pb_public
+RUN mkdir -p /home/deno/.local/pb/pb_public && mkdir -p /home/deno/.local/pb/pb_data
 COPY --from=build /app/build /home/deno/.local/pb/pb_public
 ENTRYPOINT ["/home/deno/.local/pb/pocketbase", "serve"]
 CMD ["--http=0.0.0.0:8080"]
