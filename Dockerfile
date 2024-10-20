@@ -2,7 +2,6 @@ FROM denoland/deno:2.0.0 AS base
 
 ARG PB_VERSION=0.22.21
 ARG ARCH=arm64
-ARG 
 
 USER root
 RUN mkdir -p /home/deno && chown -R deno:deno /home/deno
