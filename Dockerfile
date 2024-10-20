@@ -1,37 +1,47 @@
-FROM denoland/deno:2.0.0 AS base
+FROM debian:12-slim AS base
 
 ARG PB_VERSION=0.22.21
 ARG ARCH=arm64
+ARG UID=1000
+ARG GID=1000
 
 USER root
-RUN mkdir -p /home/deno && chown -R deno:deno /home/deno
+RUN groupadd -g $GID -o wizou
+RUN useradd -m -u $UID -g $GID -o -s /bin/bash wizou
 RUN apt update && apt install -y git sudo unzip
-RUN echo "deno ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+RUN echo "wizou ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+RUN mkdir /app && mkdir /pb && chown -R wizou:wizou /app && chown -R wizou:wizou /pb
 
-USER deno
+USER wizou
 # download and unzip PocketBase
-RUN mkdir -p /home/deno/.local/pb
-ENV PATH=$PATH:/home/deno/.local/pb
-ADD --chown=deno:deno https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_${ARCH}.zip /tmp/pb.zip
-RUN unzip /tmp/pb.zip -d /home/deno/.local/pb/
+ENV PATH=$PATH:/pb
+ADD --chown=wizou:wizou https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_${ARCH}.zip /tmp/pb.zip
+RUN unzip /tmp/pb.zip -d /pb/
+
+# download deno
+RUN mkdir -p /home/wizou/.local/bin
+ENV PATH=$PATH:/home/wizou/.local/bin
+COPY --from=denoland/deno:bin-2.0.2 --chown=wizou:wizou /deno /home/wizou/.local/bin
+
 
 FROM base AS build
 ARG PUBLIC_POCKETBASE_URL
 WORKDIR /app
-USER deno
-COPY --chown=deno:deno package.json deno.lock .
+USER wizou
+COPY --chown=wizou:wizou package.json deno.lock .
 RUN deno install --allow-scripts
-COPY --chown=deno:deno . .
+COPY --chown=wizou:wizou . .
 RUN deno task build
 
 FROM base AS database
 WORKDIR /app
-COPY ./pb_migrations /home/deno/.local/pb/pb_migrations
-ENTRYPOINT ["/home/deno/.local/pb/pocketbase", "serve"]
+COPY ./pb_migrations /pb/pb_migrations
+ENTRYPOINT ["/pb/pocketbase", "serve"]
 CMD ["--http=0.0.0.0:8080"]
 
 FROM database AS app
-RUN mkdir -p /home/deno/.local/pb/pb_public && mkdir -p /home/deno/.local/pb/pb_data
-COPY --from=build /app/build /home/deno/.local/pb/pb_public
-ENTRYPOINT ["/home/deno/.local/pb/pocketbase", "serve"]
+RUN mkdir -p /pb/pb_public && mkdir -p /pb/pb_data
+COPY --from=build /app/build /pb/pb_public
+
+ENTRYPOINT ["/pb/pocketbase", "serve"]
 CMD ["--http=0.0.0.0:8080"]

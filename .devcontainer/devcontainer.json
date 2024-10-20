@@ -5,11 +5,11 @@
     "context": "..",
     "target": "base"
   },
-  "remoteUser": "deno",
+  "remoteUser": "wizou",
   "mounts": [
     "source=${localWorkspaceFolderBasename}-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume"
   ],
-  "postCreateCommand": "sudo chown deno:deno node_modules && deno install --allow-scripts=npm:@sveltejs/kit",
+  "postCreateCommand": "sudo chown wizou:wizou node_modules && deno install --allow-scripts=npm:@sveltejs/kit",
   "customizations": {
     "vscode": {
       "extensions": [

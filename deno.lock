@@ -20,7 +20,8 @@
     "npm:tailwindcss@^3.4.13": "3.4.14_postcss@8.4.47",
     "npm:typescript-eslint@8": "8.10.0_@typescript-eslint+parser@8.10.0__eslint@9.13.0__typescript@5.6.3_eslint@9.13.0_typescript@5.6.3",
     "npm:typescript@5": "5.6.3",
-    "npm:vite@^5.4.9": "5.4.9"
+    "npm:vite@^5.4.9": "5.4.9",
+    "npm:zod@^3.23.8": "3.23.8"
   },
   "npm": {
     "@alloc/quick-lru@5.2.0": {
@@ -1589,6 +1590,9 @@
     },
     "zimmerframe@1.1.2": {
       "integrity": "sha512-rAbqEGa8ovJy4pyBxZM70hg4pE6gDgaQ0Sl9M3enG3I0d6H4XSAM3GeNGLKnsBpuijUow064sf7ww1nutC5/3w=="
+    },
+    "zod@3.23.8": {
+      "integrity": "sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g=="
     }
   },
   "workspace": {
