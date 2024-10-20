@@ -1,16 +1,11 @@
 services:
-  web:
-    image: ghcr.io/bachrc/de-l-arbre-aux-wc-app:latest
-    container_name: arbre-wc-web
-    ports:
-      - 80:80
-    environment:
-      PUBLIC_POCKETBASE_URL: 127.0.0.1:8080
-
-  db:
-    image: ghcr.io/bachrc/de-l-arbre-aux-wc-database:latest
-    container_name: arbre-wc-database
+  arbre-aux-wc:
+    image: ghcr.io/bachrc/de-l-arbre-aux-wc:latest
+    container_name: arbre-aux-wc
     ports:
       - 8080:8080
+    environment:
+      UID: '1000'
+      GID: '1000'
     volumes:
-      - ./pb_data:/home/deno/.local/pb/pb_data
+      - '/pb/pb_data'
