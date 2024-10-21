@@ -7,6 +7,7 @@ export interface Extraction extends RecordModel {
   nom: string;
   poids_cafe: number;
   releves_tds: number[];
+  notes: string;
 }
 
 export async function nouvelleExtraction(nom: string): Promise<Extraction> {

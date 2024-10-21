@@ -11,6 +11,7 @@
   const id = $page.params.id;
 
   let extraction: Extraction | null = $state(null);
+
   onMount(async () => {
     extraction = await getExtraction(id);
 
@@ -25,18 +26,27 @@
       nom: nouveauNom
     });
   }
+
+  async function majNotes(notes: string): Promise<void> {
+    await pb.collection('extractions').update(id, {
+      notes: notes
+    });
+  }
 </script>
 
 {#if extraction}
   <div class="w-full flex flex-col p-2">
     <div class="flex flex-col">
       <span class="text-xl">
-        <ChampEditable valeur={extraction.nom} onupdate={majNom} titre="Nom" />
+        <ChampEditable valeur={extraction.nom} onupdate={majNom} type="text" />
       </span>
       <span class="text-xs text-gray-800">Création : {toPrettyDateTime(extraction.created)}</span>
       <span class="text-xs text-gray-800">
         Modification : {toPrettyDateTime(extraction.updated)}
       </span>
+    </div>
+    <div class="mt-4">
+      <ChampEditable valeur={extraction.notes} titre="Notes" type="textarea" onupdate={majNotes} />
     </div>
   </div>
 {:else}

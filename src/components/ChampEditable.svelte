@@ -2,8 +2,9 @@
   import Loader from './Loader.svelte';
 
   let props: {
-    titre: string;
+    titre?: string;
     valeur: T;
+    type: 'text' | 'textarea';
     onupdate: (newValue: T) => Promise<void>;
   } = $props();
 
@@ -11,7 +12,8 @@
   let enCoursDEdition = $state(false);
   let enCoursDeSoumission = $state(false);
 
-  async function confirmation() {
+  async function confirmation(event: SubmitEvent) {
+    event.preventDefault();
     enCoursDeSoumission = true;
     try {
       await props.onupdate(valeur);
@@ -32,19 +34,24 @@
   }
 </script>
 
-{#if enCoursDEdition}
+<form class="flex flex-col" onsubmit={confirmation}>
+  {#if props.titre}
+    <label class="text-sm font-bold">{props.titre}</label>
+  {/if}
   <div class="flex flex-row gap-2">
-    <input type="string" bind:value={valeur} class="w-auto" disabled={enCoursDeSoumission} />
-    {#if enCoursDeSoumission}
-      <Loader />
+    {#if enCoursDEdition}
+      <input type={props.type} bind:value={valeur} class="w-auto" disabled={enCoursDeSoumission} />
+      {#if enCoursDeSoumission}
+        <Loader />
+      {:else}
+        <button type="submit">✅</button>
+        <button onclick={reset}>❌</button>
+      {/if}
     {:else}
-      <button onclick={confirmation}>✅</button>
-      <button onclick={reset}>❌</button>
+      <div class="flex flex-row gap-2">
+        <span>{valeur}</span>
+        <button onclick={edition}>📝</button>
+      </div>
     {/if}
   </div>
-{:else}
-  <div class="flex flex-row gap-2">
-    <span>{valeur}</span>
-    <button onclick={edition}>📝</button>
-  </div>
-{/if}
+</form>
