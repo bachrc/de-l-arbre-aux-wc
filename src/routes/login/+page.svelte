@@ -1,17 +1,16 @@
 <script lang="ts">
   import { login } from '$lib/login.svelte';
-  import { pb } from '$lib/database';
-  import { loginSchema } from '$lib/schemas';
   import { enhance } from '$app/forms';
   import { goto } from '$app/navigation';
 
-  let mail: string;
-  let password: string;
+  let mail = $state('');
+  let password = $state('');
 
-  let connexionError: string;
+  let connexionError = $state('');
 
-  async function validate() {
+  async function validate(event: SubmitEvent) {
     try {
+      event.preventDefault();
       await login(mail, password);
 
       goto('/');
@@ -21,7 +20,7 @@
   }
 </script>
 
-<form method="POST" class="w-full max-w-sm p-4" on:submit|preventDefault={validate}>
+<form method="POST" class="w-full max-w-sm p-4" onsubmit={validate}>
   <div class="border p-4 rounded-xl">
     <div class="md:flex md:items-center mb-6">
       <div class="md:w-1/3">

@@ -2,6 +2,7 @@ import type { AuthModel, RecordModel } from 'pocketbase';
 import { pb } from './database';
 
 export type User = {
+  id: string;
   username: string;
   email: string;
   name: string;
