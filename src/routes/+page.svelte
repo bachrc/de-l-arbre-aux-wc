@@ -1,7 +1,6 @@
 <script lang="ts">
   import { currentUser } from '$lib/login.svelte';
   import GrosBouton from '../components/GrosBouton.svelte';
-  import BoutonNouvelleExtraction from '../components/GrosBouton.svelte';
   import ListeExtractions from '../components/ListeExtractions.svelte';
 </script>
 

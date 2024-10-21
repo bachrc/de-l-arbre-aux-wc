@@ -23,9 +23,11 @@ export async function nouvelleExtraction(nom: string): Promise<Extraction> {
 }
 
 export async function getExtractions(page: number, perPage: number) {
-  return await pb.collection('extractions').getList(page, perPage);
+  return await pb.collection('extractions').getList(page, perPage, {
+    sort: '-updated'
+  });
 }
 
-export async function getExtraction(id: string) {
+export async function getExtraction(id: string): Promise<Extraction> {
   return await pb.collection('extractions').getOne(id);
 }
