@@ -1,24 +1,23 @@
-<script lang="ts">
-  import BoutonsEdition from './BoutonsEdition.svelte';
-  import Loader from './Loader.svelte';
-
-  let props: {
+<script lang="ts" generics="T extends string | number">
+  let {
+    titre,
+    customClass,
+    valeur = $bindable(),
+    onupdate
+  }: {
     titre?: string;
     customClass?: string;
-    valeur: string;
-    type: 'text' | 'textarea';
-    onupdate: (newValue: string) => Promise<void>;
+    valeur: T;
+    onupdate: (newValue: T) => Promise<void>;
   } = $props();
-  const valeurInitiale = props.valeur;
-
-  let valeur = $state(valeurInitiale);
+  let valeurAvantEdition = valeur;
   let enCoursDEdition = $state(false);
   let enCoursDeSoumission = $state(false);
 
   async function onconfirm() {
     enCoursDeSoumission = true;
     try {
-      await props.onupdate(valeur);
+      await onupdate(valeur);
       enCoursDEdition = false;
     } catch (e: any) {
     } finally {
@@ -26,33 +25,57 @@
     }
   }
 
+  function activationEdition() {
+    enCoursDEdition = true;
+    valeurAvantEdition = valeur;
+  }
+
   function onreset() {
-    valeur = valeurInitiale;
+    valeur = valeurAvantEdition;
     enCoursDEdition = false;
   }
 </script>
 
 <div class="flex flex-col">
-  {#if props.titre}
+  {#if titre}
     <div class="flex flex-row items-center gap-2">
-      <span class="text-sm font-bold">{props.titre}</span>
-      <BoutonsEdition bind:enCoursDEdition {onconfirm} {onreset} />
+      <span class="text-sm font-bold">{titre}</span>
+      {@render boutonsEdition()}
     </div>
   {/if}
   <div class="flex flex-row gap-2">
     {#if enCoursDEdition}
-      <span
-        class="whitespace-pre-line bg-white border-solid border-red-700 {props.customClass}"
-        bind:textContent={valeur}
-        contenteditable
-      ></span>
+      {@render edition()}
     {:else}
-      <span class="whitespace-pre-line {props.customClass}">
+      <span class="whitespace-pre-line {customClass}">
         {valeur}
       </span>
     {/if}
-    {#if !props.titre}
-      <BoutonsEdition bind:enCoursDEdition {onconfirm} {onreset} />
+    {#if !titre}
+      {@render boutonsEdition()}
     {/if}
   </div>
 </div>
+
+{#snippet edition()}
+  {#if typeof valeur == 'number'}
+    <input type="number" class="bg-white {customClass}" bind:value={valeur} />
+  {:else}
+    <span
+      class="whitespace-pre-line bg-white {customClass}"
+      bind:textContent={valeur as string}
+      contenteditable
+    ></span>
+  {/if}
+{/snippet}
+
+{#snippet boutonsEdition()}
+  <div class="flex flex-row text-sm items-center gap-2">
+    {#if enCoursDEdition}
+      <button onclick={onconfirm}>✅</button>
+      <button onclick={onreset}>❌</button>
+    {:else}
+      <button onclick={activationEdition}>📝</button>
+    {/if}
+  </div>
+{/snippet}

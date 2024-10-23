@@ -19,20 +19,29 @@
 
     // Subscribe to changes only in the specified record
     pb.collection('extractions').subscribe(id, function (e) {
+      console.log(e);
       extraction = e.record as Extraction;
     });
   });
 
-  async function majNom(nouveauNom: string): Promise<void> {
+  async function majNom(nouveauNom: string) {
     await pb.collection('extractions').update(id, {
       nom: nouveauNom
     });
   }
 
-  async function majNotes(notes: string): Promise<void> {
+  async function majNotes(notes: string) {
     await pb.collection('extractions').update(id, {
       notes: notes
     });
+  }
+
+  async function majPoidsCafe(nouveau_poids: number) {
+    if (nouveau_poids > 0) {
+      await pb.collection('extractions').update(id, {
+        poids_cafe: nouveau_poids
+      });
+    }
   }
 
   async function suppression() {
@@ -45,7 +54,7 @@
   <div class="w-full flex flex-col p-2">
     <div class="flex flex-col">
       <span class="text-xl">
-        <ChampEditable valeur={extraction.nom} onupdate={majNom} type="text" />
+        <ChampEditable valeur={extraction.nom} onupdate={majNom} />
       </span>
       <span class="text-xs text-gray-800">Création : {toPrettyDateTime(extraction.created)}</span>
       <span class="text-xs text-gray-800">
@@ -57,8 +66,16 @@
         customClass="w-full text-sm"
         valeur={extraction.notes}
         titre="Notes"
-        type="textarea"
         onupdate={majNotes}
+      />
+    </div>
+    <hr class="my-4" />
+    <div>
+      <ChampEditable
+        titre="Poids du café"
+        valeur={extraction.poids_cafe}
+        onupdate={majPoidsCafe}
+        customClass="w-full"
       />
     </div>
     <hr class="my-4" />
