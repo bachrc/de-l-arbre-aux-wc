@@ -1,5 +1,13 @@
 <script lang="ts">
+  import { pb } from '$lib/database';
   import { currentUser } from '$lib/login.svelte';
+  import ChampEditable from '../../components/ChampEditable.svelte';
+
+  async function majNom(nouveau_nom: string) {
+    await pb.collection('users').update(currentUser.value.id, {
+      name: nouveau_nom
+    });
+  }
 </script>
 
 <div class="p-2">
@@ -7,7 +15,7 @@
   <div class="flex flex-col gap-4">
     <div class="flex flex-col">
       <span class="text-xs font-bold">Nom</span>
-      <span>{currentUser.value?.name}</span>
+      <ChampEditable type="text" valeur={currentUser.value?.name} onupdate={majNom} />
     </div>
     <div class="flex flex-col">
       <span class="text-xs font-bold">Pseudonyme</span>
