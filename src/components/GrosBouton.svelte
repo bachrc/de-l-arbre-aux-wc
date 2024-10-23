@@ -1,20 +1,33 @@
 <script lang="ts">
-  import type { Snippet } from 'svelte';
+  import { createRawSnippet, type Snippet } from 'svelte';
   import Loader from './Loader.svelte';
 
-  type Props = {
+  let confirmationApparente = $state(false);
+
+  let props: {
     children: Snippet;
     loading?: boolean;
-    onclick?: () => void;
-  };
+    customClass?: string;
+    confirmation?: string;
+    onclick: () => void;
+  } = $props();
 
-  let props: Props = $props();
+  function clic() {
+    if (!props.confirmation) {
+      return props.onclick();
+    }
+
+    if (!confirmationApparente) {
+      confirmationApparente = true;
+      return;
+    }
+
+    props.onclick();
+  }
 </script>
 
 <button
   class="w-full
-        bg-green-300
-        disabled:bg-green-100
         py-3
         rounded-lg
         hover:shadow-md
@@ -24,12 +37,18 @@
         gap-2
         justify-center
         items-center
-        h-12"
+        h-12
+        {props.customClass}
+        "
   disabled={props.loading}
-  onclick={props.onclick}
+  onclick={clic}
 >
   {#if props.loading}
     <Loader />
   {/if}
-  <span>{@render props.children()}</span>
+  {#if confirmationApparente}
+    <span>{props.confirmation}</span>
+  {:else}
+    <span>{@render props.children()}</span>
+  {/if}
 </button>

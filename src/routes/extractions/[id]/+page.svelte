@@ -7,6 +7,8 @@
   import { pb } from '$lib/database';
   import { toPrettyDateTime } from '$lib/time';
   import ChampEditable from '../../../components/ChampEditable.svelte';
+  import GrosBouton from '../../../components/GrosBouton.svelte';
+  import { goto } from '$app/navigation';
 
   const id = $page.params.id;
 
@@ -32,6 +34,11 @@
       notes: notes
     });
   }
+
+  async function suppression() {
+    await pb.collection('extractions').delete(id);
+    goto('/');
+  }
 </script>
 
 {#if extraction}
@@ -53,6 +60,14 @@
         type="textarea"
         onupdate={majNotes}
       />
+    </div>
+    <hr class="my-4" />
+    <div>
+      <GrosBouton
+        customClass="bg-red-600 text-white"
+        confirmation="Êtes-vous sûr•e ?"
+        onclick={suppression}>Supprimer l'extraction (définitif)</GrosBouton
+      >
     </div>
   </div>
 {:else}

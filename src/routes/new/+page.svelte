@@ -35,7 +35,13 @@
   />
 
   <div class="mt-4">
-    <GrosBouton loading={creationEnCours} onclick={creationExtraction}>Faisons du café</GrosBouton>
+    <GrosBouton
+      customClass="bg-green-300 disabled:bg-green-100"
+      loading={creationEnCours}
+      onclick={creationExtraction}
+    >
+      Faisons du café
+    </GrosBouton>
   </div>
 
   {#if erreurCreation}
