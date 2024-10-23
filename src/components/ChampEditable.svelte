@@ -1,19 +1,21 @@
-<script lang="ts" generics="T extends string | number">
+<script lang="ts">
+  import BoutonsEdition from './BoutonsEdition.svelte';
   import Loader from './Loader.svelte';
 
   let props: {
     titre?: string;
-    valeur: T;
+    customClass?: string;
+    valeur: string;
     type: 'text' | 'textarea';
-    onupdate: (newValue: T) => Promise<void>;
+    onupdate: (newValue: string) => Promise<void>;
   } = $props();
+  const valeurInitiale = props.valeur;
 
-  let valeur = $state(props.valeur);
+  let valeur = $state(valeurInitiale);
   let enCoursDEdition = $state(false);
   let enCoursDeSoumission = $state(false);
 
-  async function confirmation(event: SubmitEvent) {
-    event.preventDefault();
+  async function onconfirm() {
     enCoursDeSoumission = true;
     try {
       await props.onupdate(valeur);
@@ -24,34 +26,33 @@
     }
   }
 
-  function reset() {
-    valeur = props.valeur;
+  function onreset() {
+    valeur = valeurInitiale;
     enCoursDEdition = false;
-  }
-
-  function edition() {
-    enCoursDEdition = true;
   }
 </script>
 
-<form class="flex flex-col" onsubmit={confirmation}>
+<div class="flex flex-col">
   {#if props.titre}
-    <label class="text-sm font-bold">{props.titre}</label>
+    <div class="flex flex-row items-center gap-2">
+      <span class="text-sm font-bold">{props.titre}</span>
+      <BoutonsEdition bind:enCoursDEdition {onconfirm} {onreset} />
+    </div>
   {/if}
   <div class="flex flex-row gap-2">
     {#if enCoursDEdition}
-      <input type={props.type} bind:value={valeur} class="w-auto" disabled={enCoursDeSoumission} />
-      {#if enCoursDeSoumission}
-        <Loader />
-      {:else}
-        <button type="submit">✅</button>
-        <button onclick={reset}>❌</button>
-      {/if}
+      <span
+        class="whitespace-pre-line bg-white border-solid border-red-700 {props.customClass}"
+        bind:textContent={valeur}
+        contenteditable
+      ></span>
     {:else}
-      <div class="flex flex-row gap-2">
-        <span>{valeur}</span>
-        <button onclick={edition}>📝</button>
-      </div>
+      <span class="whitespace-pre-line {props.customClass}">
+        {valeur}
+      </span>
+    {/if}
+    {#if !props.titre}
+      <BoutonsEdition bind:enCoursDEdition {onconfirm} {onreset} />
     {/if}
   </div>
-</form>
+</div>

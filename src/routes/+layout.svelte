@@ -6,7 +6,7 @@
   let { children } = $props();
 </script>
 
-<div class="flex flex-col min-h-screen">
+<div class="flex flex-col min-h-screen bg-amber-50">
   <nav class="flex flex-row w-full h-10 bg-amber-100 items-center gap-2 px-4">
     <a href="/"><span>☕️</span></a>
     <div class="grow"></div>
@@ -18,7 +18,7 @@
       </a>
     {/if}
   </nav>
-  <main class="grow bg-amber-50">
+  <main class="grow mx-auto container">
     {@render children()}
   </main>
   <footer class="w-full text-xs h-10 gap-2 bg-amber-100 flex flex-row items-center justify-center">

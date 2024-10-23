@@ -46,7 +46,13 @@
       </span>
     </div>
     <div class="mt-4">
-      <ChampEditable valeur={extraction.notes} titre="Notes" type="textarea" onupdate={majNotes} />
+      <ChampEditable
+        customClass="w-full text-sm"
+        valeur={extraction.notes}
+        titre="Notes"
+        type="textarea"
+        onupdate={majNotes}
+      />
     </div>
   </div>
 {:else}
