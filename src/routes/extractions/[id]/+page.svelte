@@ -9,8 +9,10 @@
   import ChampEditable from '../../../components/ChampEditable.svelte';
   import GrosBouton from '../../../components/GrosBouton.svelte';
   import { goto } from '$app/navigation';
+  import ReleveTds from '../../../components/ReleveTds.svelte';
 
   const id = $page.params.id;
+  let new_tds: number | undefined = $state();
 
   let extraction: Extraction | null = $state(null);
 
@@ -48,6 +50,28 @@
     await pb.collection('extractions').delete(id);
     goto('/');
   }
+
+  async function addTds() {
+    if (!new_tds) {
+      return;
+    }
+
+    let nouveaux_releves_tds = (extraction?.releves_tds ?? []).concat(new_tds);
+    console.log(nouveaux_releves_tds);
+    await pb.collection('extractions').update(id, {
+      releves_tds: nouveaux_releves_tds
+    });
+    new_tds = undefined;
+  }
+
+  async function removeTds(index: number) {
+    let releves = extraction?.releves_tds;
+    releves?.splice(index, 1);
+
+    await pb.collection('extractions').update(id, {
+      releves_tds: releves
+    });
+  }
 </script>
 
 {#if extraction}
@@ -70,7 +94,7 @@
       />
     </div>
     <hr class="my-4" />
-    <div>
+    <div class="mb-4">
       <ChampEditable
         titre="Poids du café"
         valeur={extraction.poids_cafe}
@@ -78,12 +102,30 @@
         customClass="w-full"
       />
     </div>
+    <div class="flex flex-col">
+      <span class="text-sm font-bold">Relevés TDS</span>
+      <div class=" grid grid-cols-4 gap-1 text-center">
+        {#each extraction.releves_tds as releve, index (index)}
+          <ReleveTds {index} value={releve} ondelete={removeTds} />
+        {/each}
+      </div>
+      <div class="flex flex-row mt-2">
+        <input
+          type="number"
+          class="w-3/4 py-2 px-4 border rounded-2xl rounded-r-none border-r-0"
+          bind:value={new_tds}
+        />
+        <button class="w-1/4 text-center border rounded-2xl rounded-l-none" onclick={addTds}
+          >✚</button
+        >
+      </div>
+    </div>
     <hr class="my-4" />
     <div>
       <GrosBouton
         customClass="bg-red-600 text-white"
         confirmation="Êtes-vous sûr•e ?"
-        onclick={suppression}>Supprimer l'extraction (définitif)</GrosBouton
+        onclick={suppression}>Supprimer l'extraction</GrosBouton
       >
     </div>
   </div>

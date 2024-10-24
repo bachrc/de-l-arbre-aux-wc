@@ -13,7 +13,8 @@ export interface Extraction extends RecordModel {
 export async function nouvelleExtraction(nom: string): Promise<Extraction> {
   const creationExtraction = creationExtractionSchema.parse({
     nom,
-    utilisateur: currentUser.value.id
+    utilisateur: currentUser.value.id,
+    releves_tds: []
   });
 
   const nouvelleExtraction: Extraction = await pb
