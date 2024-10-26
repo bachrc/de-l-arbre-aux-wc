@@ -24,21 +24,23 @@
     annotationPlugin
   );
   let {
-    extraction = $bindable()
+    extraction
   }: {
     extraction: Extraction;
   } = $props();
 
   let ctx: CanvasRenderingContext2D;
   let chartCanvas: HTMLCanvasElement;
-  let chart: Chart | null;
+  let chart: Chart;
 
   $effect(() => {
-    chart?.destroy();
-
     ctx = chartCanvas.getContext('2d')!;
 
     chart = setupChart(ctx, extraction);
+
+    return () => {
+      chart.destroy();
+    };
   });
 </script>
 

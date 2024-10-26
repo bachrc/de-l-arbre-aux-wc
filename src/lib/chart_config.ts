@@ -1,6 +1,12 @@
 import { calculYield, tdsMoyen, yieldMoyen, type Extraction } from './extractions.ts';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { Chart, type ChartItem, type ChartConfiguration } from 'chart.js';
+import {
+  LIMITE_TDS_FAIBLESSE,
+  LIMITE_TDS_FORCE,
+  LIMITE_YIELD_SOUS_EXTRACTION,
+  LIMITE_YIELD_SUR_EXTRACTION
+} from './verdict.ts';
 
 export function setupChart(node: ChartItem, extraction: Extraction): Chart {
   const config: ChartConfiguration = {
@@ -14,72 +20,72 @@ export function setupChart(node: ChartItem, extraction: Extraction): Chart {
             weak_and_underextracted: {
               type: 'box',
               xMin: 0,
-              xMax: 18,
+              xMax: LIMITE_YIELD_SOUS_EXTRACTION,
               yMin: 0,
-              yMax: 1.15,
+              yMax: LIMITE_TDS_FAIBLESSE,
               backgroundColor: 'rgba(0, 125, 200, 0.20)'
             },
             underextracted: {
               type: 'box',
               xMin: 0,
-              xMax: 18,
-              yMin: 1.15,
-              yMax: 1.45,
+              xMax: LIMITE_YIELD_SOUS_EXTRACTION,
+              yMin: LIMITE_TDS_FAIBLESSE,
+              yMax: LIMITE_TDS_FORCE,
               backgroundColor: 'rgba(0, 125, 200, 0.40)'
             },
             strong_and_underextracted: {
               type: 'box',
               xMin: 0,
-              xMax: 18,
-              yMin: 1.45,
+              xMax: LIMITE_YIELD_SOUS_EXTRACTION,
+              yMin: LIMITE_TDS_FORCE,
               yMax: 2,
               backgroundColor: 'rgba(0, 125, 200, 0.60)'
             },
             weak: {
               type: 'box',
-              xMin: 18,
-              xMax: 22,
+              xMin: LIMITE_YIELD_SOUS_EXTRACTION,
+              xMax: LIMITE_YIELD_SUR_EXTRACTION,
               yMin: 0,
-              yMax: 1.15,
+              yMax: LIMITE_TDS_FAIBLESSE,
               backgroundColor: 'rgba(39, 212, 82, 0.2)'
             },
             ideal: {
               type: 'box',
-              xMin: 18,
-              xMax: 22,
-              yMin: 1.15,
-              yMax: 1.45,
+              xMin: LIMITE_YIELD_SOUS_EXTRACTION,
+              xMax: LIMITE_YIELD_SUR_EXTRACTION,
+              yMin: LIMITE_TDS_FAIBLESSE,
+              yMax: LIMITE_TDS_FORCE,
               backgroundColor: 'rgba(39, 212, 82, 0.4)'
             },
             strong: {
               type: 'box',
-              xMin: 18,
-              xMax: 22,
-              yMin: 1.45,
+              xMin: LIMITE_YIELD_SOUS_EXTRACTION,
+              xMax: LIMITE_YIELD_SUR_EXTRACTION,
+              yMin: LIMITE_TDS_FORCE,
               yMax: 2,
               backgroundColor: 'rgba(39, 212, 82, 0.6)'
             },
             weak_and_overextracted: {
               type: 'box',
-              xMin: 22,
+              xMin: LIMITE_YIELD_SUR_EXTRACTION,
               xMax: 30,
               yMin: 0,
-              yMax: 1.15,
+              yMax: LIMITE_TDS_FAIBLESSE,
               backgroundColor: 'rgba(200, 75, 0, 0.2)'
             },
             overextracted: {
               type: 'box',
-              xMin: 22,
+              xMin: LIMITE_YIELD_SUR_EXTRACTION,
               xMax: 30,
-              yMin: 1.15,
-              yMax: 1.45,
+              yMin: LIMITE_TDS_FAIBLESSE,
+              yMax: LIMITE_TDS_FORCE,
               backgroundColor: 'rgba(200, 75, 0, 0.4)'
             },
             strong_and_overextracted: {
               type: 'box',
-              xMin: 22,
+              xMin: LIMITE_YIELD_SUR_EXTRACTION,
               xMax: 30,
-              yMin: 1.45,
+              yMin: LIMITE_TDS_FORCE,
               yMax: 2,
               backgroundColor: 'rgba(200, 75, 0, 0.6)'
             }
@@ -128,12 +134,12 @@ export function setupChart(node: ChartItem, extraction: Extraction): Chart {
           label: 'TDS Moyen',
           backgroundColor: 'rgba(254, 70, 255, 1)',
           borderColor: 'rgba(254, 70, 255, 1)',
-          data: [{ x: tdsMoyen(extraction), y: yieldMoyen(extraction) }],
+          data: [{ x: yieldMoyen(extraction), y: tdsMoyen(extraction) }],
           radius: 6
         }
       ]
     }
   };
-  console.log(config);
+
   return new Chart(node, config);
 }

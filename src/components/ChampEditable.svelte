@@ -41,7 +41,7 @@
 <div class="flex flex-col">
   {#if titre}
     <div class="flex flex-row items-center gap-2">
-      <span class="text-sm font-bold">{titre}</span>
+      <span class="font-bold">{titre}</span>
       {@render boutonsEdition()}
     </div>
   {/if}
