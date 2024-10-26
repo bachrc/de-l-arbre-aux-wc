@@ -7,5 +7,8 @@ export const loginSchema = z.object({
 
 export const creationExtractionSchema = z.object({
   nom: z.string().min(5).max(50),
-  utilisateur: z.string()
+  poids_cafe: z.number().positive(),
+  poids_boisson: z.number().positive(),
+  utilisateur: z.string(),
+  releves_tds: z.array(z.number())
 });

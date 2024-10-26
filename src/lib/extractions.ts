@@ -6,15 +6,36 @@ import { currentUser } from './login.svelte.ts';
 export interface Extraction extends RecordModel {
   nom: string;
   poids_cafe: number;
+  poids_boisson: number;
   releves_tds: number[];
   notes: string;
 }
 
-export async function nouvelleExtraction(nom: string): Promise<Extraction> {
+export function calculYield(extraction: Extraction, tds: number): number {
+  return (tds * extraction.poids_boisson) / extraction.poids_cafe;
+}
+
+export function tdsMoyen(extraction: Extraction): number {
+  const sommeReleves = extraction.releves_tds.reduce((p, c) => p + c, 0);
+
+  return sommeReleves / extraction.releves_tds.length;
+}
+
+export function yieldMoyen(extraction: Extraction): number {
+  return calculYield(extraction, tdsMoyen(extraction));
+}
+
+export async function nouvelleExtraction(
+  nom: string,
+  poids_boisson: number,
+  poids_cafe: number
+): Promise<Extraction> {
   const creationExtraction = creationExtractionSchema.parse({
     nom,
     utilisateur: currentUser.value.id,
-    releves_tds: []
+    releves_tds: [],
+    poids_boisson,
+    poids_cafe
   });
 
   const nouvelleExtraction: Extraction = await pb

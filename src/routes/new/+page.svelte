@@ -7,6 +7,8 @@
 
   let creationEnCours = $state(false);
   let nom = $state('');
+  let poids_boisson = $state(0);
+  let poids_cafe = $state(0);
 
   let erreurCreation = $state('');
 
@@ -14,10 +16,11 @@
     creationEnCours = true;
 
     try {
-      let extraction = await nouvelleExtraction(nom);
+      let extraction = await nouvelleExtraction(nom, poids_boisson, poids_cafe);
+
       goto(`/extractions/${extraction.id}`);
     } catch (e: any) {
-      erreurCreation = 'Erreur lors de la création';
+      erreurCreation = 'Champs invalides';
     } finally {
       creationEnCours = false;
     }
@@ -32,6 +35,20 @@
     class="w-full rounded-xl border-orange-300 border-solid h-8 p-2"
     placeholder="Pérou, batch d'hier..."
     bind:value={nom}
+  />
+
+  <h2 class="text-sm font-bold mt-2">Le poids du café</h2>
+  <input
+    type="number"
+    class="w-full rounded-xl border-orange-300 border-solid h-8 p-2"
+    bind:value={poids_cafe}
+  />
+
+  <h2 class=" text-sm font-bold mt-2">Le poids de la boisson</h2>
+  <input
+    type="number"
+    class="w-full rounded-xl border-orange-300 border-solid h-8 p-2"
+    bind:value={poids_boisson}
   />
 
   <div class="mt-4">

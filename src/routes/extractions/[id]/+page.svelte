@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { getExtraction } from '$lib/extractions';
-  import { onMount } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   import Loader from '../../../components/Loader.svelte';
   import type { Extraction } from '$lib/extractions';
   import { pb } from '$lib/database';
@@ -10,6 +10,8 @@
   import GrosBouton from '../../../components/GrosBouton.svelte';
   import { goto } from '$app/navigation';
   import ReleveTds from '../../../components/ReleveTds.svelte';
+  import TdsChart from '../../../components/TdsChart.svelte';
+  import type { UnsubscribeFunc } from 'pocketbase';
 
   const id = $page.params.id;
   let new_tds: number | undefined = $state();
@@ -19,7 +21,6 @@
   onMount(async () => {
     extraction = await getExtraction(id);
 
-    // Subscribe to changes only in the specified record
     pb.collection('extractions').subscribe(id, function (e) {
       console.log(e);
       extraction = e.record as Extraction;
@@ -46,6 +47,14 @@
     }
   }
 
+  async function majPoidsBoisson(nouveau_poids: number) {
+    if (nouveau_poids > 0) {
+      await pb.collection('extractions').update(id, {
+        poids_boisson: nouveau_poids
+      });
+    }
+  }
+
   async function suppression() {
     await pb.collection('extractions').delete(id);
     goto('/');
@@ -57,10 +66,10 @@
     }
 
     let nouveaux_releves_tds = (extraction?.releves_tds ?? []).concat(new_tds);
-    console.log(nouveaux_releves_tds);
     await pb.collection('extractions').update(id, {
       releves_tds: nouveaux_releves_tds
     });
+
     new_tds = undefined;
   }
 
@@ -78,7 +87,7 @@
   <div class="w-full flex flex-col p-2">
     <div class="flex flex-col">
       <span class="text-xl">
-        <ChampEditable valeur={extraction.nom} onupdate={majNom} />
+        <ChampEditable type="text" valeur={extraction.nom} onupdate={majNom} />
       </span>
       <span class="text-xs text-gray-800">Création : {toPrettyDateTime(extraction.created)}</span>
       <span class="text-xs text-gray-800">
@@ -87,6 +96,7 @@
     </div>
     <div class="mt-4">
       <ChampEditable
+        type="text"
         customClass="w-full text-sm"
         valeur={extraction.notes}
         titre="Notes"
@@ -94,15 +104,28 @@
       />
     </div>
     <hr class="my-4" />
-    <div class="mb-4">
-      <ChampEditable
-        titre="Poids du café"
-        valeur={extraction.poids_cafe}
-        onupdate={majPoidsCafe}
-        customClass="w-full"
-      />
+    <div class="flex flex-row">
+      <div class="w-1/2">
+        <ChampEditable
+          titre="Poids du café"
+          type="number"
+          valeur={extraction.poids_cafe}
+          onupdate={majPoidsCafe}
+          customClass="w-full"
+        />
+      </div>
+      <div class="w-1/2">
+        <ChampEditable
+          titre="Poids de la boisson"
+          type="number"
+          valeur={extraction.poids_boisson}
+          onupdate={majPoidsBoisson}
+          customClass="w-full"
+        />
+      </div>
     </div>
-    <div class="flex flex-col">
+
+    <div class="flex flex-col mt-4">
       <span class="text-sm font-bold">Relevés TDS</span>
       <div class=" grid grid-cols-4 gap-1 text-center">
         {#each extraction.releves_tds as releve, index (index)}
@@ -118,6 +141,9 @@
         <button class="w-1/4 text-center border rounded-2xl rounded-l-none" onclick={addTds}
           >✚</button
         >
+      </div>
+      <div>
+        <TdsChart bind:extraction />
       </div>
     </div>
     <hr class="my-4" />

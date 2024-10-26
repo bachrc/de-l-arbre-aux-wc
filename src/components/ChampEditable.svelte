@@ -3,11 +3,13 @@
     titre,
     customClass,
     valeur = $bindable(),
+    type,
     onupdate
   }: {
     titre?: string;
     customClass?: string;
     valeur: T;
+    type: 'text' | 'number';
     onupdate: (newValue: T) => Promise<void>;
   } = $props();
   let valeurAvantEdition = valeur;
@@ -58,7 +60,7 @@
 </div>
 
 {#snippet edition()}
-  {#if typeof valeur == 'number'}
+  {#if type === 'number'}
     <input type="number" class="bg-white {customClass}" bind:value={valeur} />
   {:else}
     <span
