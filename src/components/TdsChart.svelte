@@ -44,4 +44,4 @@
   });
 </script>
 
-<canvas bind:this={chartCanvas} id="extractionChart" height={256}></canvas>
+<canvas bind:this={chartCanvas} id="extractionChart"></canvas>

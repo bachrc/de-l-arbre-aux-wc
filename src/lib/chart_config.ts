@@ -13,6 +13,7 @@ export function setupChart(node: ChartItem, extraction: Extraction): Chart {
     type: 'scatter',
     plugins: [annotationPlugin],
     options: {
+      responsive: true,
       animation: false,
       plugins: {
         annotation: {

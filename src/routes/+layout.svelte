@@ -18,7 +18,7 @@
       </a>
     {/if}
   </nav>
-  <main class="grow mx-auto container">
+  <main class="grow md:max-w-screen-md md:container md:mx-auto">
     {@render children()}
   </main>
   <footer class="w-full text-xs h-10 gap-2 bg-amber-100 flex flex-row items-center justify-center">

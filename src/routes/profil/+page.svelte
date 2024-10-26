@@ -15,7 +15,7 @@
   <div class="flex flex-col gap-4">
     <div class="flex flex-col">
       <span class="text-xs font-bold">Nom</span>
-      <ChampEditable valeur={currentUser.value?.name} onupdate={majNom} />
+      <ChampEditable type="text" valeur={currentUser.value?.name} onupdate={majNom} />
     </div>
     <div class="flex flex-col">
       <span class="text-xs font-bold">Pseudonyme</span>
