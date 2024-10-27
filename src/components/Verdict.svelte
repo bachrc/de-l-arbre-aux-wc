@@ -32,6 +32,6 @@
   };
 </script>
 
-<span class="w-full px-2 py-4 {couleursDeReussite[mauvaisPoints]}">
+<span class="w-full rounded-3xl p-4 {couleursDeReussite[mauvaisPoints]}">
   {verdictFinal}
 </span>
