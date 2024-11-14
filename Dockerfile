@@ -21,7 +21,7 @@ RUN unzip /tmp/pb.zip -d /pb/
 # download deno
 RUN mkdir -p /home/wizou/.local/bin
 ENV PATH=$PATH:/home/wizou/.local/bin
-COPY --from=denoland/deno:bin-2.0.2 --chown=wizou:wizou /deno /home/wizou/.local/bin
+COPY --from=denoland/deno:bin-2.0.6 --chown=wizou:wizou /deno /home/wizou/.local/bin
 
 
 FROM base AS build

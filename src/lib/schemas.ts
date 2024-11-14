@@ -6,7 +6,7 @@ export const loginSchema = z.object({
 });
 
 export const creationExtractionSchema = z.object({
-  nom: z.string().min(5).max(50),
+  nom: z.string().min(5).max(100),
   poids_cafe: z.number().positive(),
   poids_boisson: z.number().positive(),
   utilisateur: z.string(),
